@@ -1,23 +1,52 @@
 const mongoose = require('mongoose');
 
+
 // Import of the model Recipe from './models/Recipe.model.js'
 const Recipe = require('./models/Recipe.model');
 // Import of the data from './data.json'
 const data = require('./data');
 
-const MONGODB_URI = 'mongodb://localhost:27017/recipe-app';
+const Schema = mongoose.Schema;
+
+const MONGODB_URI = 'mongodb+srv://evros:12345@cluster0.pek9mht.mongodb.net/MyFirstDatabase';
 
 // Connection to the database "recipe-app"
 mongoose
   .connect(MONGODB_URI)
-  .then(x => {
+  .then((x) => {
     console.log(`Connected to the database: "${x.connection.name}"`);
-    // Before adding any recipes to the database, let's remove all existing ones
     return Recipe.deleteMany()
   })
   .then(() => {
-    // Run your code here, after you have insured that the connection was made
+    const nutellaSandwich = {
+      "title": "Nutella sandwich",
+      "level": "Amateur Chef",
+      "ingredients": [
+        "Lots of nutella",
+        "Freshly baked bread",
+        "A pinch of maldon salt",
+      ],
+      "cuisine": "Casal d'estiu",
+      "dishType": "snack",
+      "image": "https://assets.epicurious.com/photos/5b8863a51c53e84aa2655f56/1:1/w_2560%2Cc_limit/Nutella-Grilled-Cheese-29302018.jpg",
+      "duration": 5,
+      "creator": "Edna Vros"
+    }
+    Recipe.create(nutellaSandwich)
+      .then((element) => console.log(element.title))
   })
+  .then(() => {
+    // console.log(data)
+    Recipe.insertMany(data)
+  })
+  // .then(() => 
+  // data.forEach(() => {
+  //   console.log(datatitle)
+  // }))
   .catch(error => {
     console.error('Error connecting to the database', error);
   });
+
+
+
+
