@@ -33,20 +33,30 @@ mongoose
       "creator": "Edna Vros"
     }
     Recipe.create(nutellaSandwich)
-      .then((element) => console.log(element.title))
+  })
+  .then((element) => console.log(element.title))
+  .then(() => {
+    return Recipe.insertMany(data)
+  })
+  .then((alltherecipes) => {
+    alltherecipes.forEach((recipe) => {
+      console.log(recipe.title)
+    })
   })
   .then(() => {
-    // console.log(data)
-    Recipe.insertMany(data)
+    return Recipe.findOneAndUpdate({title: "Rigatoni alla Genovese"}, {duration: 100}, {new: true})
   })
-  // .then(() => 
-  // data.forEach(() => {
-  //   console.log(datatitle)
-  // }))
+  .then(updatedRecipe => console.log("THIS RECIPE HAS BEEN UPDATED: ", updatedRecipe))
+  .then(() => {
+   return Recipe.deleteOne({title: "Carrot Cake"})
+  })
+  .then((deletedRecipe) => console.log("THIS RECIPE HAS BEEN DELETED: ", deletedRecipe))
   .catch(error => {
     console.error('Error connecting to the database', error);
-  });
-
+  })
+  .finally(() => {
+    mongoose.connection.close
+  })
 
 
 
